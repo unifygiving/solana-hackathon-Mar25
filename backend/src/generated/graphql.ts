@@ -40,7 +40,7 @@ export type Beneficiary = {
   donations_received: Scalars['Float']['output'];
   email: Scalars['String']['output'];
   first_name?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   last_name?: Maybe<Scalars['String']['output']>;
 };
 
@@ -115,14 +115,21 @@ export type Donor = {
   donations_given: Scalars['Float']['output'];
   email: Scalars['String']['output'];
   first_name?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   last_name?: Maybe<Scalars['String']['output']>;
 };
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
+export type Mcfile = {
+  __typename?: 'Mcfile';
+  donations_given: Scalars['Float']['output'];
+  donations_received: Scalars['Float']['output'];
+  email: Scalars['String']['output'];
+  first_name?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  last_name?: Maybe<Scalars['String']['output']>;
+  role: RoleType;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createBeneficiary?: Maybe<CharityUser>;
@@ -140,29 +147,17 @@ export type Mutation = {
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationCreateBeneficiaryArgs = {
-  charityId: Scalars['Int']['input'];
+  charityId: Scalars['ID']['input'];
   detail: NewCharityBeneficiary;
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationCreateCharityArgs = {
   detail: NewCharity;
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationCreateCryptoDonationArgs = {
   amountInLamports: Scalars['Int']['input'];
   beneficiaryId: Scalars['Int']['input'];
@@ -170,76 +165,44 @@ export type MutationCreateCryptoDonationArgs = {
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationCreateDonorArgs = {
   input: NewDonorInput;
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationCreatePaymentArgs = {
   input: NewPaymentInput;
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationCryptoPaymentCompletedArgs = {
   donationId: Scalars['String']['input'];
   txHash: Scalars['String']['input'];
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationDeleteDonorArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationProcessPaymentArgs = {
   paymentId: Scalars['ID']['input'];
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationUpdateDonorArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
   input: NewDonorInput;
 };
 
 
-/**
- * For file upload, client MUST sent a header called Apollo-Require-Preflight: "true"
- * Or the request will fail with CSRF prevention
- */
 export type MutationUpdatePaymentStatusArgs = {
   id: Scalars['ID']['input'];
   status: PaymentStatus;
@@ -343,12 +306,12 @@ export type QueryCharitiesArgs = {
 
 
 export type QueryDonationsArgs = {
-  donorId?: InputMaybe<Scalars['Int']['input']>;
+  donorId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
 export type QueryDonorArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -379,7 +342,7 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   first_name?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   last_name?: Maybe<Scalars['String']['output']>;
   role: RoleType;
 };
@@ -479,6 +442,7 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Mcfile: ResolverTypeWrapper<Mcfile>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCharity: NewCharity;
   NewCharityAdmin: NewCharityAdmin;
@@ -512,6 +476,7 @@ export type ResolversParentTypes = {
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Mcfile: Mcfile;
   Mutation: {};
   NewCharity: NewCharity;
   NewCharityAdmin: NewCharityAdmin;
@@ -555,7 +520,7 @@ export type BeneficiaryResolvers<ContextType = any, ParentType extends Resolvers
   donations_received?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   first_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   last_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -605,8 +570,19 @@ export type DonorResolvers<ContextType = any, ParentType extends ResolversParent
   donations_given?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   first_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   last_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type McfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mcfile'] = ResolversParentTypes['Mcfile']> = {
+  donations_given?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  donations_received?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  first_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  last_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['RoleType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -661,7 +637,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   first_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   last_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['RoleType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -677,6 +653,7 @@ export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   Donation?: DonationResolvers<ContextType>;
   Donor?: DonorResolvers<ContextType>;
+  Mcfile?: McfileResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Payment?: PaymentResolvers<ContextType>;
   PaymentCompletedResult?: PaymentCompletedResultResolvers<ContextType>;

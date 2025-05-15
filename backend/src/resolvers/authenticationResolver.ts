@@ -11,7 +11,7 @@ const resolver = {
                 try {
                     // Use type assertion to tell TypeScript what type result is
                     const result = await userService.login(args.email, args.password) as {
-                        user: { id: string | number; role: string; email: string; [key: string]: any };
+                        user: { id: number; role: string; email: string; [key: string]: any };
                         token: string;
                     } | null;
                     
@@ -25,7 +25,7 @@ const resolver = {
                     const authResult: AuthPayload = {
                         user: {
                             ...result.user,
-                            id: result.user.id.toString(),
+                            id: result.user.id,
                             role: valueToEnum(RoleType, result.user.role),
                             email: result.user.email // Ensure email is included
                         },

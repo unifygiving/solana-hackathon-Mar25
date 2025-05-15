@@ -1,5 +1,5 @@
 type Charity @cacheControl(maxAge: 3600) {
-    id: ID! # Changed from Int!
+    id: Int!
     name: String!
     website: String
     mission: String
@@ -9,11 +9,11 @@ type Charity @cacheControl(maxAge: 3600) {
     beneficiaries(offset: Int! = 0, limit: Int! = 10): [CharityUser!]! 
 }
 type Query{
-    charities(id: ID, offset: Int! = 0, limit: Int! = 30): [Charity!]! # Changed id from Int
-    beneficiary(id: ID!): CharityUser! # Changed from Int!
+    charities(id: Int, offset: Int! = 0, limit: Int! = 30): [Charity!]! # Changed id from Int
+    beneficiary(id: Int!): CharityUser! # Changed from Int!
 }
 type CharityUser{
-    id: ID! # Changed from Int!
+    id: Int!
     email: String!
     first_name: String
     last_name: String
