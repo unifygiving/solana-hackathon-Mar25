@@ -33,6 +33,15 @@ import {
   FormData,
   FormErrors,
 } from "@/types/beneficiary";
+import "@dialectlabs/blinks/index.css";
+
+import {
+  Blink,
+  useBlink,
+  useBlinksRegistryInterval,
+} from "@dialectlabs/blinks";
+import { useBlinkSolanaWalletAdapter } from "@dialectlabs/blinks/hooks/solana";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 // Modal style
 const modalStyle = {
@@ -56,7 +65,41 @@ export default function BeneficiaryDetailsPage({
 }) {
   const { id } = use(params);
   const router = useRouter();
-  const beneficiaryId = parseInt(id);
+  // const beneficiaryId = parseInt(id);
+
+  const [beneficiaryId, setBeneficiaryId] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    // If id is "0", extract it from the URL
+    if (id === "0") {
+      // Get the current URL path
+      const path = window.location.pathname;
+      // Extract the ID from the URL
+      const urlId = path.split("/").pop();
+      if (urlId && !isNaN(parseInt(urlId))) {
+        setBeneficiaryId(parseInt(urlId));
+      } else {
+        // Handle case where URL doesn't contain a valid ID
+        console.error("No valid ID found in URL");
+        router.push("/charities");
+      }
+    } else {
+      // Use the ID passed from params
+      setBeneficiaryId(parseInt(id));
+    }
+  }, [id, router]);
+  // URL of your endpoint (blink provider)
+  // const blinkApiUrl =
+  //   "https://bonkblinks.com/api/actions/lock?_brf=a0898550-e7ec-408d-b721-fca000769498&_bin=ffafbecd-bb86-435a-8722-e45bf139eab5";
+  const blinkApiUrl =
+    "https://solana-hackathon-mar25.onrender.com/solana-actions/3";
+  // Initiates adapter
+  const { adapter } = useBlinkSolanaWalletAdapter(
+    "https://api.mainnet-beta.solana.com"
+  );
+
+  // Fetches the blink from the provided URL
+  const { blink, isLoading } = useBlink({ url: blinkApiUrl });
 
   const { user, isAuthenticated } = useAuthStore();
   const { startDonation, completeDonation, resetDonation } = useDonationStore();
@@ -340,12 +383,17 @@ export default function BeneficiaryDetailsPage({
               <Card sx={{ bgcolor: "#111", borderRadius: 2, height: "100%" }}>
                 <CardMedia
                   component="img"
-                  height="400"
-                  image="https://plus.unsplash.com/premium_photo-1742404280719-ae54cdb86722?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  height="100" // <-- This fixed height is the issue
+                  image="https://images.unsplash.com/photo-1444212477490-ca407925329e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt={`${beneficiary.first_name} ${beneficiary.last_name}`}
-                  sx={{ objectFit: "cover" }}
+                  sx={{
+                    objectFit: "cover",
+                    // Add height: '100%' to the sx prop of CardMedia
+                    height: "100%",
+                  }}
                 />
               </Card>
+              {/* <Blink blink={blink} adapter={adapter} /> */}
             </Grid>
 
             {/* Right Side: Beneficiary Info with Donate Button Below */}

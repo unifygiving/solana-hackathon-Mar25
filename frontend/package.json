@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.4",
+    "@dialectlabs/blinks": "^0.22.5",
     "@metaplex-foundation/js": "^0.20.1",
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
     "@metaplex-foundation/umi": "^1.1.1",
